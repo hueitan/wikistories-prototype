@@ -1,5 +1,5 @@
 <template>
-  <div class="viewer" :style="currentFrame.style">
+  <div class="viewer" :style="currentFrame.style" v-if="valid">
     <div class="progress-container">
       <div v-for="n in storyLength" :key="n" class="progress">
         <div v-if="currentFrame.id === n" class="loading"></div>
@@ -22,7 +22,7 @@ export default {
       storyEnd: false
     }
   },
-  computed: mapGetters(['currentFrame', 'storyLength']),
+  computed: mapGetters(['currentFrame', 'storyLength', 'valid']),
   methods: {
     ...mapActions(['selectFrame', 'resetFrame']),
     playNextFrame: function() {
@@ -43,14 +43,14 @@ export default {
     }
   },
   created: function() {
-    // query
     if ( this.currentFrame.id === 1 ) {
       const storyId = this.$route.params.id
-      queryStory( storyId ).then( stories =>  {
-        this.resetFrame( stories )
-        this.restartStory();
+      queryStory( storyId ).then( stories => {
+        if ( stories.length ) {
+          this.resetFrame( stories )
+          this.restartStory();
+        }
       })
-      
     }
   },
   beforeMount: function() {

@@ -33,7 +33,9 @@
         components: { Navigator, PrimaryButton },
         methods: {
             onPublish: function() {
-                const storyId = setStory( this.storyInfo.frames )
+                const storyId = setStory( 
+                    this.storyInfo.frames.map( ({img, text}) => ({img, text})) 
+                )
                 this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
             }
         },

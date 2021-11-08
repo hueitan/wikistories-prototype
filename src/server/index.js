@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
+import { getFirestore, writeBatch, doc, collection, getDoc, getDocs, query, where } from "firebase/firestore"
 
 // =================== CONFIGURATION =================== //
 const COLLECTION = {
@@ -24,17 +24,18 @@ const db = getFirestore(app);
 export const setStory = ( array ) => {
     const storiesId = getRandomString();
     const storiesRef = doc(db, COLLECTION.STORIES, storiesId );
+    const batch = writeBatch(db);
     let storyList = []
 
     array.map( frame => {
         const storyId = getRandomString();
         const storyRef = doc(db, COLLECTION.STORY, storyId );
-        setDoc(storyRef, frame, { merge: true } );
+        batch.set(storyRef, { ...frame, id: [ storiesId ] }, { merge: true } );
         storyList.push( storyId )
     })
 
-    setDoc(storiesRef, { list: storyList }, { merge: true } )
-    
+    batch.set(storiesRef, { list: storyList }, { merge: true } )
+    batch.commit();
     return storiesId;
 }
 
@@ -44,12 +45,13 @@ export const queryStory = async ( storiesId ) => {
     const stories = [];
 
     if (docSnap.exists()) {
-        const storyList = docSnap.data().list;
-        for( const storyId of storyList) {
-            const storyRef = doc(db,COLLECTION.STORY, storyId )
-            const storySnap = await getDoc(storyRef)
-            stories.push( storySnap.data() )
-        }
+        const museums = query(collection(db, COLLECTION.STORY), where('id', 'array-contains', storiesId));
+        const querySnapshot = await getDocs(museums);
+        let index = 1
+        querySnapshot.forEach(doc => {
+            const { img, text } = doc.data();
+            stories.push( { img, text, id: index++ } )
+        });
     } 
 
     return stories;
