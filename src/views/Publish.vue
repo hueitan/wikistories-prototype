@@ -27,13 +27,14 @@
     import { mapGetters } from 'vuex'
     import PrimaryButton from '@components/PrimaryButton.vue'
     import Navigator from '@components/Navigator.vue'
-
+    import { setStory } from '@server';
     export default {
         name: 'Publish',
         components: { Navigator, PrimaryButton },
         methods: {
             onPublish: function() {
-                this.$router.push( { name: 'StoryViewer' } );
+                const storyId = setStory( this.storyInfo.frames )
+                this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
             }
         },
         computed: {

@@ -93,7 +93,8 @@ export default {
     storyInfo: (state) => {
       return {
         title: state.frames[0].text, // @todo to be edited by user
-        creationDate: state.creationDate
+        creationDate: state.creationDate,
+        frames: state.frames
       }
     },
     valid: (state) => {

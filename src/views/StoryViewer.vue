@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { queryStory } from '@server'
 export default {
   name: 'StoryViewer',
   data: () => {
@@ -23,7 +24,7 @@ export default {
   },
   computed: mapGetters(['currentFrame', 'storyLength']),
   methods: {
-    ...mapActions(['selectFrame']),
+    ...mapActions(['selectFrame', 'resetFrame']),
     playNextFrame: function() {
       const timeoutId = setTimeout( () => {
         this.selectFrame(this.currentFrame.id + 1)
@@ -39,6 +40,17 @@ export default {
         this.storyEnd = true
         clearTimeout(timeoutId)
       }, this.frameDuration)
+    }
+  },
+  created: function() {
+    // query
+    if ( this.currentFrame.id === 1 ) {
+      const storyId = this.$route.params.id
+      queryStory( storyId ).then( stories =>  {
+        this.resetFrame( stories )
+        this.restartStory();
+      })
+      
     }
   },
   beforeMount: function() {
