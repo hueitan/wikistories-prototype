@@ -3,6 +3,8 @@
         <router-link to="/searchcommons" class="commons logo">{{ $i18n('wikimedia-commons') }}</router-link>
         <div class="border" />
         <router-link to="/searchwikipedia" class="wikipedia logo">{{ $i18n('wikipedia') }}</router-link>
+        <div class="border" />
+        <router-link to="/searchwikistories" class="wikipedia logo">{{ $i18n('wikistories') }}</router-link>
     </div>
 </template>
 <script>

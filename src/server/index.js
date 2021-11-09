@@ -30,7 +30,7 @@ export const setStory = ( array ) => {
     array.map( frame => {
         const storyId = getRandomString();
         const storyRef = doc(db, COLLECTION.STORY, storyId );
-        batch.set(storyRef, { ...frame, id: [ storiesId ] }, { merge: true } );
+        batch.set(storyRef, { ...frame, id: [ storiesId ], keyword: frame.text.split(' ') }, { merge: true } );
         storyList.push( storyId )
     })
 
@@ -57,9 +57,19 @@ export const queryStory = async ( storiesId ) => {
     return stories;
 }
 
-// export const searchStory = ( query ) => {
+export const searchStory = async ( queryString ) => {
+    const storiesRef = query(collection(db, COLLECTION.STORY), where('keyword', 'array-contains', queryString));
+    const storiesSnap = await getDocs(storiesRef)
+    const stories = []
+    if (!storiesSnap.empty) {
+        storiesSnap.forEach(doc => {
+            const { img, text, id } = doc.data();
+            stories.push( { img, text, id } )
+        });
+    }
 
-// }
+    return stories;
+}
 
 // ====================== UTILITY ====================== //
 
