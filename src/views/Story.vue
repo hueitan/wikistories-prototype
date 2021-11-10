@@ -2,7 +2,7 @@
 <div class="view story">
     <PrimaryButton class="publish-button"
         v-if="canPublish"
-        :text="$i18n('btn-publish')"
+        :text="$i18n('btn-next')"
         :onClick="onPublish"
     />
     <CurrentFrame />

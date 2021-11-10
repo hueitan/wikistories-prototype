@@ -9,7 +9,6 @@ export default {
   'wikimedia-commons': 'Commons',
   'wikipedia': 'Wikipedia',
   'wikistories': 'Wikistories',
-  'btn-publish': 'Publish',
   'btn-publish-wikistory': 'Publish Wikistory',
   'btn-highlight': 'Highlight',
   'btn-clear': 'Clear',

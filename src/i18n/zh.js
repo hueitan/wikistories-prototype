@@ -7,7 +7,6 @@ export default {
   'search-media-info': '$1 選擇',
   'wikimedia-commons': '維基共享資源',
   'wikipedia': '維基百科',
-  'btn-publish': '發佈',
   'btn-publish-wikistory': '發佈 Wikistory',
   'btn-highlight': 'Highlight',
   'btn-clear': '移除',

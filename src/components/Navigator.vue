@@ -2,7 +2,7 @@
     <div class="navigator">
         <!-- Use <router-link> but able to call event before route? -->
         <div v-if="onBack" class="back" @click="onBack"/>
-        <div v-if="onNext" class="next" @click="onNext"/>
+        <div v-if="onNext" class="next" @click="onNext">{{ $i18n('btn-next') }}</div>
         <span class="info" v-if="info">{{ info }}</span>
     </div>
 </template>
@@ -40,13 +40,12 @@
       cursor: pointer;
     }
     .navigator .next {
-      background-image: url(../images/back.svg);
       position: absolute;
-      transform: scaleX(-1); 
       width: 16px;
       height: 16px;
       right: 0;
-      margin: 20px 0;
+      margin: 20px;
       cursor: pointer;
+      font-weight: bold;
     }
 </style>

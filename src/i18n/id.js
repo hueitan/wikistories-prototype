@@ -7,7 +7,6 @@ export default {
   'search-media-info': '$1 dipilih',
   'wikimedia-commons': 'Commons',
   'wikipedia': 'Wikipedia',
-  'btn-publish': 'Terbitkan',
   'btn-publish-wikistory': 'Publikasikan Wikistory',
   'btn-highlight': 'Sorot teks',
   'btn-clear': 'Hapus pilihan',
