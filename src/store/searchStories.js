@@ -35,7 +35,7 @@ export default {
               title: p.text,
               desc: `Story id: ${id}`,
               thumb: p.img,
-              goto: { name: 'StoryViewer', params: { id } }
+              goto: { name: 'Story', params: { id } }
             }
           }))
         }
