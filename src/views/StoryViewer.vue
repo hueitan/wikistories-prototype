@@ -44,7 +44,7 @@ export default {
   },
   created: function() {
     const storyId = this.$route.params.id;
-    if ( this.storyInfo.id !== storyId ) {
+    if ( storyId && ( storyId !== this.storyInfo.id ) ) {
       this.resetFrame( [] )
       queryStory( storyId ).then( stories => {
         if ( stories.length ) {

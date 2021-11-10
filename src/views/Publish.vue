@@ -1,6 +1,6 @@
 <template>
     <div class="view publish">
-        <Navigator :onBack="() => this.$router.push( { name: 'Story' } )" />
+        <Navigator :onBack="() => this.$router.go(-1)" />
         <div class="header">
             <h2 class="title" v-html="storyInfo.title"></h2>
             <div class="img-preview" :style="imgSyle"></div>
@@ -19,7 +19,10 @@
                 <p class="info">English</p>
             </div>
         </div>
-        <PrimaryButton class="confirm-publish" :text="$i18n('btn-publish-wikistory')" :onClick="onPublish" />
+        <div class="confirm-publish">
+            <PrimaryButton :text="$i18n('btn-preview-wikistory')" :onClick="onPreview" />
+            <PrimaryButton :text="$i18n('btn-publish-wikistory')" :onClick="onPublish" />
+        </div>
     </div>
 </template>
 
@@ -39,6 +42,9 @@
                 )
                 this.setStoryId( storyId );
                 this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
+            },
+            onPreview: function() {
+                this.$router.push( { name: 'StoryViewer' } );
             }
         },
         computed: {

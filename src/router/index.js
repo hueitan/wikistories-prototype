@@ -49,7 +49,7 @@ const routes = [
     component: Publish
   },
   {
-    path: '/viewer/:id',
+    path: '/viewer/:id?',
     name: 'StoryViewer',
     component: StoryViewer
   }

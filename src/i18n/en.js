@@ -10,6 +10,7 @@ export default {
   'wikipedia': 'Wikipedia',
   'wikistories': 'Wikistories',
   'btn-publish-wikistory': 'Publish Wikistory',
+  'btn-preview-wikistory': 'Preview',
   'btn-highlight': 'Highlight',
   'btn-clear': 'Clear',
   'btn-select-image': 'Select an image',
