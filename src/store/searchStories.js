@@ -15,7 +15,7 @@ export default {
   },
   actions: {
     search: ({ commit }, query) => {
-      const queryString = query.trim();
+      const queryString = query.trim().toLowerCase();
 
       commit('setQuery', query)
       
@@ -30,10 +30,12 @@ export default {
       searchStory( queryString ).then( data => {
         if ( data.length ) {
           commit('setResults', Object.values(data).map(p => {
+            const id = p.id[0];
             return {
               title: p.text,
+              desc: `Story id: ${id}`,
               thumb: p.img,
-              goto: { name: 'StoryViewer', params: { id: p.id[0] } }
+              goto: { name: 'StoryViewer', params: { id } }
             }
           }))
         }

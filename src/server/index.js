@@ -30,7 +30,7 @@ export const setStory = ( array ) => {
     array.map( frame => {
         const storyId = getRandomString();
         const storyRef = doc(db, COLLECTION.STORY, storyId );
-        batch.set(storyRef, { ...frame, id: [ storiesId ], keyword: frame.text.split(' ') }, { merge: true } );
+        batch.set(storyRef, { ...frame, id: [ storiesId ], keyword: stripString( frame.text ).split(' ') }, { merge: true } );
         storyList.push( storyId )
     })
 
@@ -80,4 +80,8 @@ function getRandomString(length = 6) {
         result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
     }
     return result;
+}
+
+function stripString( input ) {
+    return input.replace(/[[\]~&/\\#,+()$~%.'":*?<>{}!@^]/g, '').toLowerCase();
 }

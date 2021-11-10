@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import PrimaryButton from '@components/PrimaryButton.vue'
     import Navigator from '@components/Navigator.vue'
     import { setStory } from '@server';
@@ -32,10 +32,12 @@
         name: 'Publish',
         components: { Navigator, PrimaryButton },
         methods: {
+            ...mapActions(['setStoryId']),
             onPublish: function() {
                 const storyId = setStory( 
                     this.storyInfo.frames.map( ({img, text}) => ({img, text})) 
                 )
+                this.setStoryId( storyId );
                 this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
             }
         },

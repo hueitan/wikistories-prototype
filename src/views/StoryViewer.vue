@@ -22,7 +22,7 @@ export default {
       storyEnd: false
     }
   },
-  computed: mapGetters(['currentFrame', 'storyLength', 'valid']),
+  computed: mapGetters(['currentFrame', 'storyInfo', 'storyLength', 'valid']),
   methods: {
     ...mapActions(['selectFrame', 'resetFrame']),
     playNextFrame: function() {
@@ -43,14 +43,17 @@ export default {
     }
   },
   created: function() {
-    if ( this.currentFrame.id === 1 ) {
-      const storyId = this.$route.params.id
+    const storyId = this.$route.params.id;
+    if ( this.storyInfo.id !== storyId ) {
+      this.resetFrame( [] )
       queryStory( storyId ).then( stories => {
         if ( stories.length ) {
           this.resetFrame( stories )
           this.restartStory();
         }
       })
+    } else {
+      this.restartStory();
     }
   },
   beforeMount: function() {
