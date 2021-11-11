@@ -6,6 +6,7 @@
         <div v-else-if="currentFrame.id > n" class="loaded"></div>
       </div>
     </div>
+    <div class="share-btn" v-if="canShareStory()" @click="shareStory"></div>
     <div class="story-text" v-if="currentFrame.text" v-html="currentFrame.text"></div>
     <div class="restart-btn" v-if="storyEnd" @click="restartStory">{{ $i18n('btn-restart-story') }}</div>
   </div>
@@ -40,6 +41,20 @@ export default {
         this.storyEnd = true
         clearTimeout(timeoutId)
       }, this.frameDuration)
+    },
+    canShareStory: function() {
+      return location.protocol ==='https:' && 
+        this.$route.params.id && 
+        navigator.share
+    },
+    shareStory: function() {
+      const shareData = {
+        title: 'Wikistories',
+        text: 'Share this story',
+        url: location.href
+      }
+
+      navigator.share(shareData)
     }
   },
   created: function() {
@@ -92,6 +107,14 @@ export default {
     background-color: white;
     margin: 0;
     padding: 10px;
+  }
+  .share-btn {
+    background-image: url(../images/share.svg);
+    position: absolute;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
   }
   .restart-btn {
     position: absolute;
