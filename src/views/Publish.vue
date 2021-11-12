@@ -18,6 +18,7 @@
                         :to="{ name: 'StoryViewer', params: { id: rev } }">
                         {{rev}}
                     </router-link>
+                    <span v-if="storyInfo.revision.length === 0">New</span>
                 </p>
             </div>
             <div class="item">

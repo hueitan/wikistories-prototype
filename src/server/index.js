@@ -21,7 +21,7 @@ const db = getFirestore(app);
 
 // ======================= USAGE ======================= //
 
-export const setStory = ( { frames, revision } ) => {
+export const setStory = ( { frames, copies, revision } ) => {
     const storiesId = getRandomString();
     const storiesRef = doc(db, COLLECTION.STORIES, storiesId );
     const batch = writeBatch(db);
@@ -29,10 +29,23 @@ export const setStory = ( { frames, revision } ) => {
     let storyList = []
 
     array.map( frame => {
-        const storyId = getRandomString();
-        const storyRef = doc(db, COLLECTION.STORY, storyId );
-        batch.set(storyRef, { ...frame, id: [ storiesId ], keyword: stripString( frame.text ).split(' ') }, { merge: true } );
-        storyList.push( storyId )
+        const copyIndex = copies.findIndex( ({text, img}) => frame.text === text && frame.img === img )
+        if ( copyIndex === -1 ) {
+            const storyId = getRandomString();
+            const storyRef = doc(db, COLLECTION.STORY, storyId );
+            batch.set(storyRef, { 
+                ...frame,
+                id: [ storiesId ], 
+                keyword: stripString( frame.text ).split(' ') 
+            }, { merge: true } );
+            storyList.push( storyId )
+        } else {
+            const storyId = copies[ copyIndex ].storyId;
+            const storyRef = doc(db, COLLECTION.STORY, storyId );
+            const storiesIdList = copies[ copyIndex ].storiesIdList;
+            batch.update(storyRef, { id: [ ...storiesIdList, storiesId ]})
+            storyList.push( storyId )
+        }
     })
 
     batch.set(storiesRef, { list: storyList, revision }, { merge: true } )
@@ -50,8 +63,8 @@ export const queryStory = async ( storiesId ) => {
         const querySnapshot = await getDocs(museums);
         let index = 1
         querySnapshot.forEach(doc => {
-            const { img, text } = doc.data();
-            stories.push( { img, text, id: index++ } )
+            const { img, text, id } = doc.data();
+            stories.push( { img, text, id: index++, storyId: doc.id, storiesIdList: id } )
         });
     } 
 

@@ -27,7 +27,7 @@ export default {
         PrimaryButton
   },
   methods: {
-      ...mapActions(['setCreationDate', 'setRevision', 'resetFrame']),
+      ...mapActions(['setCreationDate', 'setRevision', 'setCopies', 'resetFrame']),
       onPublish: function() {
         this.setCreationDate(); 
         this.$router.push( { name: 'Publish' } );
@@ -40,6 +40,7 @@ export default {
         if ( stories.length ) {
           this.resetFrame( stories )
           this.setRevision( [ ...revision, storyId ] )
+          this.setCopies( [ ...stories ] )
         }
       })
     }

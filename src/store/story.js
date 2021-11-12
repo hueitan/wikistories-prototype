@@ -17,6 +17,7 @@ export default {
     storyTitle: '', // @todo to be edited by user
     creationDate: null,
     currentFrameId: 1,
+    copies: [],
     frames: [
       {
         id: 1,
@@ -55,6 +56,9 @@ export default {
     },
     setRevision: (state, revision) => {
       state.revision = revision;
+    },
+    setCopies: (state, copies) => {
+      state.copies = copies;
     }
   },
   actions: {
@@ -78,6 +82,9 @@ export default {
     },
     setRevision: ({commit}, revision) => {
       commit('setRevision', revision)
+    },
+    setCopies: ({commit}, copies) => {
+      commit('setCopies', copies)
     },
     setStoryId:({commit}, id) => {
       commit('setStoryId', id)
@@ -110,7 +117,8 @@ export default {
         revision: state.revision,
         title: state.frames[0].text, // @todo to be edited by user
         creationDate: state.creationDate,
-        frames: state.frames
+        frames: state.frames,
+        copies: state.copies
       }
     },
     valid: (state) => {

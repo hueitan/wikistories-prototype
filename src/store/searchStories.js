@@ -30,7 +30,7 @@ export default {
       searchStory( queryString ).then( data => {
         if ( data.length ) {
           commit('setResults', Object.values(data).map(p => {
-            const id = p.id[0];
+            const id = p.id[ p.id.length - 1];
             return {
               title: p.text,
               desc: `Story id: ${id}`,
