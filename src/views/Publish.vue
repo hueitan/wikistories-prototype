@@ -1,6 +1,6 @@
 <template>
     <div class="view publish">
-        <Navigator :onBack="() => this.$router.push( { name: 'Story' } )" />
+        <Navigator :onBack="() => this.$router.go(-1)" />
         <div class="header">
             <h2 class="title" v-html="storyInfo.title"></h2>
             <div class="img-preview" :style="imgSyle"></div>
@@ -11,6 +11,17 @@
                 <p class="info">{{ storyInfo.creationDate | formatDate }}</p>
             </div>
             <div class="item">
+                <label class="label">Revision (Press to view history story)</label>
+                <p class="info">
+                    <router-link target="_blank" class="revision-item"
+                        v-for="rev in storyInfo.revision" :key="rev"
+                        :to="{ name: 'StoryViewer', params: { id: rev } }">
+                        {{rev}}
+                    </router-link>
+                    <span v-if="storyInfo.revision.length === 0">New</span>
+                </p>
+            </div>
+            <div class="item">
                 <label class="tags">{{ $i18n('publish-tags') }}</label>
                 <p class="info">{{ $i18n('tags-not-set') }}</p>
             </div>
@@ -19,20 +30,29 @@
                 <p class="info">English</p>
             </div>
         </div>
-        <PrimaryButton class="confirm-publish" :text="$i18n('btn-publish-wikistory')" :onClick="onPublish" />
+        <div class="confirm-publish">
+            <PrimaryButton :text="$i18n('btn-preview-wikistory')" :onClick="onPreview" />
+            <PrimaryButton :text="$i18n('btn-publish-wikistory')" :onClick="onPublish" />
+        </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import PrimaryButton from '@components/PrimaryButton.vue'
     import Navigator from '@components/Navigator.vue'
-
+    import { setStory } from '@server';
     export default {
         name: 'Publish',
         components: { Navigator, PrimaryButton },
         methods: {
+            ...mapActions(['setStoryId']),
             onPublish: function() {
+                const storyId = setStory( this.storyInfo )
+                this.setStoryId( storyId );
+                this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
+            },
+            onPreview: function() {
                 this.$router.push( { name: 'StoryViewer' } );
             }
         },
@@ -98,6 +118,12 @@
         line-height: 24px;
         color: #828282;
         margin: 0;
+    }
+    .item .revision-item {
+        text-decoration: none;
+    }
+    .item .revision-item:hover {
+        text-decoration: underline;
     }
     .confirm-publish {
         margin: 20px auto;

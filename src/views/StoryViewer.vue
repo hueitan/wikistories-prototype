@@ -1,11 +1,12 @@
 <template>
-  <div class="viewer" :style="currentFrame.style">
+  <div class="viewer" :style="currentFrame.style" v-if="valid">
     <div class="progress-container">
       <div v-for="n in storyLength" :key="n" class="progress">
         <div v-if="currentFrame.id === n" class="loading"></div>
         <div v-else-if="currentFrame.id > n" class="loaded"></div>
       </div>
     </div>
+    <div class="share-btn" v-if="canShareStory()" @click="shareStory"></div>
     <div class="story-text" v-if="currentFrame.text" v-html="currentFrame.text"></div>
     <div class="restart-btn" v-if="storyEnd" @click="restartStory">{{ $i18n('btn-restart-story') }}</div>
   </div>
@@ -13,6 +14,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { queryStory } from '@server'
 export default {
   name: 'StoryViewer',
   data: () => {
@@ -21,9 +23,9 @@ export default {
       storyEnd: false
     }
   },
-  computed: mapGetters(['currentFrame', 'storyLength']),
+  computed: mapGetters(['currentFrame', 'storyInfo', 'storyLength', 'valid']),
   methods: {
-    ...mapActions(['selectFrame']),
+    ...mapActions(['selectFrame', 'resetFrame']),
     playNextFrame: function() {
       const timeoutId = setTimeout( () => {
         this.selectFrame(this.currentFrame.id + 1)
@@ -39,6 +41,34 @@ export default {
         this.storyEnd = true
         clearTimeout(timeoutId)
       }, this.frameDuration)
+    },
+    canShareStory: function() {
+      return location.protocol ==='https:' && 
+        this.$route.params.id && 
+        navigator.share
+    },
+    shareStory: function() {
+      const shareData = {
+        title: 'Wikistories',
+        text: 'Share this story',
+        url: location.href
+      }
+
+      navigator.share(shareData)
+    }
+  },
+  created: function() {
+    const storyId = this.$route.params.id;
+    if ( storyId && ( storyId !== this.storyInfo.id ) ) {
+      this.resetFrame( [] )
+      queryStory( storyId ).then( ({stories}) => {
+        if ( stories.length ) {
+          this.resetFrame( stories )
+          this.restartStory();
+        }
+      })
+    } else {
+      this.restartStory();
     }
   },
   beforeMount: function() {
@@ -77,6 +107,14 @@ export default {
     background-color: white;
     margin: 0;
     padding: 10px;
+  }
+  .share-btn {
+    background-image: url(../images/share.svg);
+    position: absolute;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
   }
   .restart-btn {
     position: absolute;

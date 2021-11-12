@@ -4,6 +4,7 @@ import Home from '@views/Home.vue'
 import Story from '@views/Story.vue'
 import StoryViewer from '@views/StoryViewer.vue'
 import SearchWikipedia from '@views/SearchWikipedia.vue'
+import SearchWikistories from '@views/SearchWikistories.vue'
 import SearchCommons from '@views/SearchCommons.vue'
 import Article from '@views/Article.vue'
 import Publish from '@views/Publish.vue'
@@ -17,7 +18,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/story',
+    path: '/story/:id?',
     name: 'Story',
     component: Story
   },
@@ -25,6 +26,11 @@ const routes = [
     path: '/searchwikipedia',
     name: 'SearchWikipedia',
     component: SearchWikipedia
+  },
+  {
+    path: '/searchwikistories',
+    name: 'SearchWikistories',
+    component: SearchWikistories
   },
   {
     path: '/searchcommons',
@@ -43,7 +49,7 @@ const routes = [
     component: Publish
   },
   {
-    path: '/viewer',
+    path: '/viewer/:id?',
     name: 'StoryViewer',
     component: StoryViewer
   }

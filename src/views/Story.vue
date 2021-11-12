@@ -16,6 +16,7 @@ import CurrentFrame from '@components/CurrentFrame.vue'
 import Frames from '@components/Frames.vue'
 import SearchToolbar from '@components/SearchToolbar.vue'
 import PrimaryButton from '@components/PrimaryButton.vue'
+import { queryStory } from '@server'
 
 export default {
   name: 'Story',
@@ -26,11 +27,23 @@ export default {
         PrimaryButton
   },
   methods: {
-      ...mapActions(['setCreationDate']),
+      ...mapActions(['setCreationDate', 'setRevision', 'setCopies', 'resetFrame']),
       onPublish: function() {
         this.setCreationDate(); 
         this.$router.push( { name: 'Publish' } );
       }
+  },
+  created: function() {
+    const storyId = this.$route.params.id;
+    if ( storyId ) {
+      queryStory( storyId ).then( ({stories, revision}) => {
+        if ( stories.length ) {
+          this.resetFrame( stories )
+          this.setRevision( [ ...revision, storyId ] )
+          this.setCopies( stories )
+        }
+      })
+    }
   },
   computed: {
     ...mapGetters(['currentFrame', 'storyLength', 'valid']),

@@ -12,9 +12,12 @@ const makeFrameStyle = f => {
 
 export default {
   state: {
+    id: null,
+    revision: [],
     storyTitle: '', // @todo to be edited by user
     creationDate: null,
     currentFrameId: 1,
+    copies: [],
     frames: [
       {
         id: 1,
@@ -44,9 +47,20 @@ export default {
     setImg: (state, img) => {
       const f = state.frames.find(f => f.id === state.currentFrameId)
       f.img = img
+      f.storiesIdList = []
+      f.storyId = null
     },
     setCreationDate: (state, date) => {
       state.creationDate = date;
+    },
+    setStoryId: (state, id) => {
+      state.id = id;
+    },
+    setRevision: (state, revision) => {
+      state.revision = revision;
+    },
+    setCopies: (state, copies) => {
+      state.copies = copies.map( ({img, storiesIdList, storyId, text}) => ({img, storiesIdList, storyId, text}));
     }
   },
   actions: {
@@ -67,6 +81,15 @@ export default {
     },
     setCreationDate: ({commit}) => {
       commit('setCreationDate', (new Date()).getTime())
+    },
+    setRevision: ({commit}, revision) => {
+      commit('setRevision', revision)
+    },
+    setCopies: ({commit}, copies) => {
+      commit('setCopies', copies)
+    },
+    setStoryId:({commit}, id) => {
+      commit('setStoryId', id)
     }
   },
   getters: {
@@ -82,6 +105,7 @@ export default {
     },
     currentFrame: (state) => {
       const f = state.frames.find(f => f.id === state.currentFrameId)
+      if ( !f ) { return {} }
       return {
         text: f.text,
         style: makeFrameStyle(f),
@@ -92,8 +116,12 @@ export default {
     storyLength: state => state.frames.length,
     storyInfo: (state) => {
       return {
+        id: state.id,
+        revision: state.revision,
         title: state.frames[0].text, // @todo to be edited by user
-        creationDate: state.creationDate
+        creationDate: state.creationDate,
+        frames: state.frames,
+        copies: state.copies
       }
     },
     valid: (state) => {
