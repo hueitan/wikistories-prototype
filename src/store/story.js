@@ -105,6 +105,7 @@ export default {
     },
     currentFrame: (state) => {
       const f = state.frames.find(f => f.id === state.currentFrameId)
+      if ( !f ) { return {} }
       return {
         text: f.text,
         style: makeFrameStyle(f),
