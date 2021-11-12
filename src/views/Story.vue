@@ -40,7 +40,7 @@ export default {
         if ( stories.length ) {
           this.resetFrame( stories )
           this.setRevision( [ ...revision, storyId ] )
-          this.setCopies( [ ...stories ] )
+          this.setCopies( stories )
         }
       })
     }

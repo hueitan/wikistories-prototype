@@ -47,6 +47,8 @@ export default {
     setImg: (state, img) => {
       const f = state.frames.find(f => f.id === state.currentFrameId)
       f.img = img
+      f.storiesIdList = []
+      f.storyId = null
     },
     setCreationDate: (state, date) => {
       state.creationDate = date;
@@ -58,7 +60,7 @@ export default {
       state.revision = revision;
     },
     setCopies: (state, copies) => {
-      state.copies = copies;
+      state.copies = copies.map( ({img, storiesIdList, storyId, text}) => ({img, storiesIdList, storyId, text}));
     }
   },
   actions: {
