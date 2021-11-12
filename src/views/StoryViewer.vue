@@ -61,7 +61,7 @@ export default {
     const storyId = this.$route.params.id;
     if ( storyId && ( storyId !== this.storyInfo.id ) ) {
       this.resetFrame( [] )
-      queryStory( storyId ).then( stories => {
+      queryStory( storyId ).then( ({stories}) => {
         if ( stories.length ) {
           this.resetFrame( stories )
           this.restartStory();

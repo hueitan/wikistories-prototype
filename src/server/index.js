@@ -21,10 +21,11 @@ const db = getFirestore(app);
 
 // ======================= USAGE ======================= //
 
-export const setStory = ( array ) => {
+export const setStory = ( { frames, revision } ) => {
     const storiesId = getRandomString();
     const storiesRef = doc(db, COLLECTION.STORIES, storiesId );
     const batch = writeBatch(db);
+    const array = frames.map( ({img, text}) => ({img, text}))
     let storyList = []
 
     array.map( frame => {
@@ -34,7 +35,7 @@ export const setStory = ( array ) => {
         storyList.push( storyId )
     })
 
-    batch.set(storiesRef, { list: storyList }, { merge: true } )
+    batch.set(storiesRef, { list: storyList, revision }, { merge: true } )
     batch.commit();
     return storiesId;
 }
@@ -54,7 +55,7 @@ export const queryStory = async ( storiesId ) => {
         });
     } 
 
-    return stories;
+    return { stories, revision: docSnap.data().revision || [] };
 }
 
 export const searchStory = async ( queryString ) => {

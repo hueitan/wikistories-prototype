@@ -13,6 +13,7 @@ const makeFrameStyle = f => {
 export default {
   state: {
     id: null,
+    revision: [],
     storyTitle: '', // @todo to be edited by user
     creationDate: null,
     currentFrameId: 1,
@@ -51,6 +52,9 @@ export default {
     },
     setStoryId: (state, id) => {
       state.id = id;
+    },
+    setRevision: (state, revision) => {
+      state.revision = revision;
     }
   },
   actions: {
@@ -71,6 +75,9 @@ export default {
     },
     setCreationDate: ({commit}) => {
       commit('setCreationDate', (new Date()).getTime())
+    },
+    setRevision: ({commit}, revision) => {
+      commit('setRevision', revision)
     },
     setStoryId:({commit}, id) => {
       commit('setStoryId', id)
@@ -100,6 +107,7 @@ export default {
     storyInfo: (state) => {
       return {
         id: state.id,
+        revision: state.revision,
         title: state.frames[0].text, // @todo to be edited by user
         creationDate: state.creationDate,
         frames: state.frames

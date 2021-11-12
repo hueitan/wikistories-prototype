@@ -27,7 +27,7 @@ export default {
         PrimaryButton
   },
   methods: {
-      ...mapActions(['setCreationDate', 'resetFrame']),
+      ...mapActions(['setCreationDate', 'setRevision', 'resetFrame']),
       onPublish: function() {
         this.setCreationDate(); 
         this.$router.push( { name: 'Publish' } );
@@ -36,9 +36,10 @@ export default {
   created: function() {
     const storyId = this.$route.params.id;
     if ( storyId ) {
-      queryStory( storyId ).then( stories => {
+      queryStory( storyId ).then( ({stories, revision}) => {
         if ( stories.length ) {
           this.resetFrame( stories )
+          this.setRevision( [ ...revision, storyId ] )
         }
       })
     }

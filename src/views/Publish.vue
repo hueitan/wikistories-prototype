@@ -11,6 +11,16 @@
                 <p class="info">{{ storyInfo.creationDate | formatDate }}</p>
             </div>
             <div class="item">
+                <label class="label">Revision (Press to view history story)</label>
+                <p class="info">
+                    <router-link target="_blank" class="revision-item"
+                        v-for="rev in storyInfo.revision" :key="rev"
+                        :to="{ name: 'StoryViewer', params: { id: rev } }">
+                        {{rev}}
+                    </router-link>
+                </p>
+            </div>
+            <div class="item">
                 <label class="tags">{{ $i18n('publish-tags') }}</label>
                 <p class="info">{{ $i18n('tags-not-set') }}</p>
             </div>
@@ -37,9 +47,7 @@
         methods: {
             ...mapActions(['setStoryId']),
             onPublish: function() {
-                const storyId = setStory( 
-                    this.storyInfo.frames.map( ({img, text}) => ({img, text})) 
-                )
+                const storyId = setStory( this.storyInfo )
                 this.setStoryId( storyId );
                 this.$router.push( { name: 'StoryViewer', params: { id: storyId } } );
             },
@@ -109,6 +117,12 @@
         line-height: 24px;
         color: #828282;
         margin: 0;
+    }
+    .item .revision-item {
+        text-decoration: none;
+    }
+    .item .revision-item:hover {
+        text-decoration: underline;
     }
     .confirm-publish {
         margin: 20px auto;
